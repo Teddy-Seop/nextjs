@@ -19,15 +19,23 @@ const Post: NextPage<IPostProps> = ({ posts }) => {
   return <div>{postItems}</div>;
 };
 
-Post.getInitialProps = async () => {
+// Post.getInitialProps = async () => {
+//   const posts = await fetch("https://jsonplaceholder.typicode.com/posts").then(
+//     (response) => response.json()
+//   );
+
+//   return {
+//     posts,
+//   };
+// };
+
+export async function getServerSideProps() {
   const posts = await fetch("https://jsonplaceholder.typicode.com/posts").then(
     (response) => response.json()
   );
 
-  return {
-    posts,
-  };
-};
+  return { props: { posts } };
+}
 
 const constructPostItems = (posts: IPost[]) => {
   return posts.map((post) => {
