@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 
 interface IPostProps {
@@ -19,7 +19,7 @@ const Post: NextPage<IPostProps> = ({ post }) => {
   return <div>{postItems}</div>;
 };
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const posts: IPost[] = await fetch(
     "https://jsonplaceholder.typicode.com/posts"
   ).then((response) => response.json());
@@ -29,11 +29,11 @@ export async function getStaticPaths() {
   }));
 
   return { paths, fallback: false };
-}
+};
 
-export async function getStaticProps(context: any) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post: IPost = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${context.params.id}`
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
   ).then((response) => response.json());
 
   return {
@@ -41,7 +41,7 @@ export async function getStaticProps(context: any) {
       post,
     },
   };
-}
+};
 
 const constructPost = (post: IPost) => {
   return (
